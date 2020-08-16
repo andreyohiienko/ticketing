@@ -41,7 +41,7 @@ router.post(
         id: user.id,
         email: user.email,
       },
-      'asdf',
+      process.env.JWT_KEY!, // "!" we know a 100% that this env variable is defined
     )
 
     // Store it on session object
