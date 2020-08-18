@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import useRequest from '../../hooks/use-request'
 
 const Signup = () => {
   const [email, setEmail] = useState('')
@@ -41,16 +42,6 @@ const Signup = () => {
           className="form-control"
         />
       </div>
-      {errors.length > 0 && (
-        <div className="alert alert-danger">
-          <h4>Oooops...</h4>
-          <ul className="my-0">
-            {errors.map((err) => (
-              <li>{err.message}</li>
-            ))}
-          </ul>
-        </div>
-      )}
       <button className="btn btn-primary">Sign Up</button>
     </form>
   )
