@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
+import buildClient from '../api/build-client'
 
-const App = ({ Component, pageProps }) => {
+const AppComponent = ({ Component, pageProps }) => {
   return (
     <div>
       <h1>Header</h1>
@@ -9,4 +10,6 @@ const App = ({ Component, pageProps }) => {
   )
 }
 
-export default App
+AppComponent.getInitialProps = async () => {}
+
+export default AppComponent
