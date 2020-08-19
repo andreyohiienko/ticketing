@@ -14,12 +14,12 @@ it('returns a 404 if the provide id does not exist', async () => {
     })
     .expect(404)
 })
+
 it('returns a 404 if the user is not authenticated', async () => {
   const id = mongoose.Types.ObjectId().toHexString()
 
   await request(app)
     .put(`/api/tickets/${id}`)
-    .set('Cookie', global.signin())
     .send({
       title: 'asdasdd',
       price: 20,
