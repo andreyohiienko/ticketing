@@ -26,7 +26,8 @@ it('returns a 404 if the user is not authenticated', async () => {
     })
     .expect(401)
 })
-it('returns a 404 if the user does not onw the ticket', async () => {
+
+it('returns a 401 if the user does not onw the ticket', async () => {
   const response = await request(app)
     .post('/api/tickets')
     .set('Cookie', global.signin())
@@ -44,5 +45,61 @@ it('returns a 404 if the user does not onw the ticket', async () => {
     })
     .expect(401)
 })
-it('returns a 404 if the user provides an invalid title or price', async () => {})
-it('updates the ticket provided valid inputs', async () => {})
+
+it('returns a 400 if the user provides an invalid title or price', async () => {
+  const cookie = global.signin()
+
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signin())
+    .send({
+      title: 'asdasdasd',
+      price: 20,
+    })
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: '',
+      price: 20,
+    })
+    .expect(400)
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'asdjklasdjl',
+      price: -20,
+    })
+    .expect(400)
+})
+
+it('updates the ticket provided valid inputs', async () => {
+  const cookie = global.signin()
+
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'asdasdasd',
+      price: 20,
+    })
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'new title',
+      price: 100,
+    })
+    .expect(200)
+
+  const ticketResponse = await request(app).get(
+    `/api/tickets/${response.body.id}`,
+  )
+
+  expect(ticketResponse.body.title).toEqual('new title')
+  expect(ticketResponse.body.price).toEqual(100)
+})
