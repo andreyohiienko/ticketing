@@ -14,6 +14,15 @@ const start = async () => {
 
   try {
     await natsWrapper.connect('ticketing', 'asdkasdk', 'http://nats-srv:4222')
+
+    natsWrapper.client.on('close', () => {
+      console.log('NATS connection closed')
+      process.exit()
+    })
+
+    process.on('SIGINT', () => natsWrapper.client.close()) // INTERRUPT SIGNALS
+    process.on('SIGTERM', () => natsWrapper.client.close()) // TERMINATE SIGNALS
+
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
