@@ -18,11 +18,12 @@ stan.on('connect', () => {
   const options = stan
     .subscriptionOptions()
     .setManualAckMode(true)
-    .setDeliverAllAvailable()
+    .setDeliverAllAvailable() // 1
+    .setDurableName('accounting-service') // 2
 
   const subscription = stan.subscribe(
     'ticket:created',
-    // 'orders-service-queue-group',
+    'queue-group-name', // 3 - to make sure that we do not accidentlly dumped durable name even if all of our services restart for a very brief period of time
     options,
   )
   subscription.on('message', (msg: Message) => {
