@@ -4,11 +4,9 @@ import { body } from 'express-validator'
 import {
   validateRequest,
   NotFoundError,
-  OrderStatus,
   BadRequestError,
 } from '@aotickets/common'
 import { Ticket } from '../models/ticket'
-import { Order } from '../models/order'
 
 const router = express.Router()
 
@@ -35,17 +33,8 @@ router.post(
     // Run query to look at all orders. Find an order where the ticket
     // is the ticket we just found *and* the orders status is *not* canceled.
     // If we find an order from that means the ticket *is* reserved
-    const existingOrder = await Order.findOne({
-      ticket: ticket,
-      status: {
-        $in: [
-          OrderStatus.Created,
-          OrderStatus.AwaitingPayment,
-          OrderStatus.Complete,
-        ],
-      },
-    })
-    if (existingOrder) {
+    const isReserved = await ticket.isReserved()
+    if (isReserved) {
       throw new BadRequestError('Ticket is alredy reserved')
     }
 
