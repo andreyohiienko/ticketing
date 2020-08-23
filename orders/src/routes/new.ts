@@ -38,7 +38,6 @@ router.post(
     // is the ticket we just found *and* the orders status is *not* canceled.
     // If we find an order from that means the ticket *is* reserved
     const isReserved = await ticket.isReserved()
-    console.log('isReserved', isReserved)
     if (isReserved) {
       throw new BadRequestError('Ticket is alredy reserved')
     }
@@ -58,7 +57,7 @@ router.post(
 
     // Publish an event saying that an order was created
 
-    res.send(201).send(order)
+    res.status(201).send(order)
   },
 )
 
