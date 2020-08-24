@@ -31,3 +31,20 @@ it('should implement oprimistic concurrency control', async (done) => {
 
   throw new Error('Should not reach this point')
 })
+
+it('should increment the verion number on multiple saves', async () => {
+  // Create an instance of a ticket
+  const ticket = Ticket.build({
+    title: 'concert',
+    price: 20,
+    userId: '123',
+  })
+
+  // Save the ticket to the database
+  await ticket.save()
+  expect(ticket.version).toEqual(0)
+  await ticket.save()
+  expect(ticket.version).toEqual(1)
+  await ticket.save()
+  expect(ticket.version).toEqual(2)
+})
