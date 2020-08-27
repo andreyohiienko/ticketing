@@ -3,8 +3,9 @@ import request from 'supertest'
 import { app } from '../../app'
 import { Order } from '../../models/order'
 import { OrderStatus } from '@aotickets/common'
+import { stripe } from '../../stripe'
 
-jest.mock('../../stipe')
+jest.mock('../../stripe')
 
 it('should return a 404 when purchasing an order that does not exist', async () => {
   await request(app)
@@ -65,7 +66,7 @@ it('should return a 204 with valid inputs', async () => {
     userId,
     version: 0,
     price: 20,
-    status: OrderStatus.Cancelled,
+    status: OrderStatus.Created,
   })
   await order.save()
 
@@ -76,4 +77,10 @@ it('should return a 204 with valid inputs', async () => {
       token: 'tok_visa',
       orderId: order.id,
     })
+    .expect(201)
+
+  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+  expect(chargeOptions.source).toEqual('tok_visa')
+  expect(chargeOptions.amount).toEqual(20 * 100)
+  expect(chargeOptions.currency).toEqual('usd')
 })
