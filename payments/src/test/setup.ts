@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import request from 'supertest'
 import { app } from '../app'
 import jwt from 'jsonwebtoken'
+import 'dotenv/config' // Needed for using .env file in 'test' environment
 
 declare global {
   namespace NodeJS {
@@ -13,6 +14,15 @@ declare global {
 }
 
 jest.mock('../nats-wrapper')
+
+// Quick way to set node environment variable in terminal
+// $env:VAR_NAME = 'VAR_VALUE'
+
+// Print specific environmental variable
+// $env:VAR_NAME
+
+// Enumerate all variables via the env drive
+// Get-ChildItem env:
 
 let mongo: any
 beforeAll(async () => {
