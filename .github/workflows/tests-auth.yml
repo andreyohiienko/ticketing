@@ -2,7 +2,6 @@ name: tests-auth
 
 on:
   pull_request:
-  # selective test execution
     paths:
       - 'auth/**'
 
