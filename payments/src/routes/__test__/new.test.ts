@@ -59,7 +59,6 @@ it('should return a 400 when purchasing a cancelled order', async () => {
 })
 
 it('should return a 201 with valid inputs', async () => {
-  console.log(process.env.STRIPE_KEY)
   const userId = mongoose.Types.ObjectId().toHexString()
   const price = Math.floor(Math.random() * 100000)
   const order = Order.build({
